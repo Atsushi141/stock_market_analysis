@@ -8,12 +8,11 @@ jobs:
     name: Build and Test Application
     runs-on: ubuntu-latest
     environment: DEVELOPMENT
-    env:
-      DATABRICKS_HOST: '${{ vars.DATABRICKS_HOST }}'
-      ARM_CLIENT_ID: '${{ vars.AZURE_CLIENT_ID }}'
-      ARM_TENANT_ID: '${{ vars.AZURE_TENANT_ID }}'
-      # DATABRICKS_ACCOUNT_ID: '9b640230-5171-41ad-8787-76b533b6bf26'
-      ARM_CLIENT_SECRET: '${{ vars.AZURE_CLIENT_SECRET }}'
+    # env:
+    #   DATABRICKS_HOST: '${{ vars.DATABRICKS_HOST }}'
+    #   ARM_CLIENT_ID: '${{ vars.AZURE_CLIENT_ID }}'
+    #   ARM_TENANT_ID: '${{ vars.AZURE_TENANT_ID }}'
+    #   ARM_CLIENT_SECRET: '${{ vars.AZURE_CLIENT_SECRET }}'
 
 
     steps:
@@ -28,11 +27,21 @@ jobs:
       - name: Databricks CLI Setup
         uses: databricks/setup-cli@main
 
-      - name: debug
-        run: |
-          echo ${DATABRICKS_HOST}
-          echo ${ARM_CLIENT_ID}
-          echo ${ARM_TENANT_ID}
+      - name: Configure Databricks Credentials
+        run: | 
+          cat <<EOF > ~/.databrickscfg
+          [dev]
+          host = ${{ vars.DATABRICKS_HOST }}
+          azure_tenant_id = ${{vars.AZURE_TENANT_ID }}
+          azure_client_id = ${{ vars.AZURE_CLIENT_ID }}
+          azure_client_secret = ${{ secrets.AZURE_CLIENT_SECRET }}
+          EOF
+
+      # - name: debug
+      #   run: |
+      #     echo ${DATABRICKS_HOST}
+      #     echo ${ARM_CLIENT_ID}
+      #     echo ${ARM_TENANT_ID}
 
       - name: Databricks Bundle Deploy
-        run: databricks bundle deploy -t dev
+        run: databricks bundle deploy -t dev -p dev
