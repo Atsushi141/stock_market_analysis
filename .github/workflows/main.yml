@@ -1,0 +1,27 @@
+on:
+  push:
+    branches-ignore:
+      - main
+
+env:
+  DATABRICKS_HOST: 'Workflow Environment Variable 1'
+  ARM_CLIENT_ID: ''
+  ARM_TENANT_ID: ''
+  ARM_CLIENT_SECRET: ''
+  
+jobs:
+  build-and-test:
+    name: Build and Test Application
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Databricks CLI Setup
+        uses: databricks/setup-cli@main
+
+      - name: Databricks Bundle Deploy
+        run: databricks bundle deploy -t test
