@@ -15,6 +15,7 @@ jobs:
       # DATABRICKS_ACCOUNT_ID: '9b640230-5171-41ad-8787-76b533b6bf26'
       ARM_CLIENT_SECRET: '${{ vars.AZURE_CLIENT_SECRET }}'
 
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
