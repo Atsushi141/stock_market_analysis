@@ -35,4 +35,4 @@ jobs:
           echo ${ARM_TENANT_ID}
 
       - name: Databricks Bundle Deploy
-        run: databricks bundle deploy
+        run: databricks bundle deploy -t dev
