@@ -5,21 +5,21 @@ resources:
       tasks:
         - task_key: stock_master_bronze
           notebook_task:
-            notebook_path: /Workspace/Users/databricks-admin@temp389.onmicrosoft.com/.bundle/stock_market_anaysis/dev/files/notebooks/stock_master_bronze
+            notebook_path: ${workspace.root_path}/notebooks/stock_master_bronze
             source: WORKSPACE
           environment_key: Default
         - task_key: stock_master_silver
           depends_on:
             - task_key: stock_master_bronze
           notebook_task:
-            notebook_path: /Workspace/Users/databricks-admin@temp389.onmicrosoft.com/.bundle/stock_market_anaysis/dev/files/notebooks/stock_master_silver
+            notebook_path: ${workspace.root_path}/notebooks/stock_master_silver
             source: WORKSPACE
           environment_key: Default
       queue:
         enabled: true
       parameters:
         - name: file_path
-          default: "/Volumes/yfinance-dev/raw/stock_master/data_j.csv"
+          default: "/Volumes/${var.catalog}/raw/stock_master/data_j.csv"
       run_as:
         service_principal_name: 0471c37b-ad1b-4819-a518-0b91782c7816
       environments:
@@ -36,16 +36,16 @@ resources:
       tasks:
         - task_key: stock_price_ingestion
           notebook_task:
-            notebook_path: /Workspace/Users/databricks-admin@temp389.onmicrosoft.com/.bundle/stock_market_anaysis/dev/files/notebooks/stock_price_ingestion
+            notebook_path: ${workspace.root_path}/notebooks/stock_price_ingestion
             source: WORKSPACE
           environment_key: Default
       queue:
         enabled: true
       parameters:
-        - name: stock_price_date
+        - name: proccessed_date
           default: "{{job.trigger.time.iso_date}}"
         - name: directory_path
-          default: "/Volumes/yfinance-dev/raw/stock_price"
+          default: "/Volumes/${var.catalog}/raw/stock_price"
       run_as:
         service_principal_name: 0471c37b-ad1b-4819-a518-0b91782c7816
       environments:
@@ -62,14 +62,14 @@ resources:
       tasks:
         - task_key: stock_price_bronze
           notebook_task:
-            notebook_path: /Workspace/Users/databricks-admin@temp389.onmicrosoft.com/.bundle/stock_market_anaysis/dev/files/notebooks/stock_price_bronze
+            notebook_path: ${workspace.root_path}/notebooks/stock_price_bronze
             source: WORKSPACE
           environment_key: Default
         - task_key: stock_price_silver
           depends_on:
             - task_key: stock_price_bronze
           notebook_task:
-            notebook_path: /Workspace/Users/databricks-admin@temp389.onmicrosoft.com/.bundle/stock_market_anaysis/dev/files/notebooks/stock_price_silver
+            notebook_path: ${workspace.root_path}/notebooks/stock_price_silver
             source: WORKSPACE
           environment_key: Default
       queue:
