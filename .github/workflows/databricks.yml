@@ -10,7 +10,7 @@ jobs:
   deploy:
     name: Build and Test Application
     runs-on: ubuntu-latest
-    environment: ${{ inputs.target-env }}
+    environment: ${{ inputs.target-gh-env }}
 
     steps:
       - name: Checkout code
@@ -27,7 +27,7 @@ jobs:
       - name: Configure Databricks Credentials
         run: |
           cat <<EOF > ~/.databrickscfg
-          [${{ inputs.target-env }}]
+          [${{ inputs.target-databricks-workspace }}]
           host = ${{ vars.DATABRICKS_HOST }}
           azure_tenant_id = ${{vars.AZURE_TENANT_ID }}
           azure_client_id = ${{ vars.AZURE_CLIENT_ID }}
@@ -38,4 +38,4 @@ jobs:
         run: cat ~/.databrickscfg
 
       - name: Databricks Bundle Deploy
-        run: databricks bundle deploy -t ${{ inputs.target-env }} -p ${{ inputs.target-env }}
+        run: databricks bundle deploy -t ${{ inputs.target-databricks-workspace }} -p ${{ inputs.target-databricks-workspace }}

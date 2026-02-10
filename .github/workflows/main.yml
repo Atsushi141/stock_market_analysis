@@ -7,4 +7,5 @@ jobs:
   build-and-test:
     uses: ./.github/workflows/databricks.yml
     with:
-      target-env: DEVELOPMENT
+      target-gh-env: DEVELOPMENT
+      target-databricks-workspace: dev

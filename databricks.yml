@@ -24,7 +24,7 @@ run_as:
 #     path: .
 
 targets:
-  DEVELOPMENT:
+  dev:
     mode: development
     default: true
     workspace:
@@ -32,7 +32,7 @@ targets:
     variables:
       catalog: main
       schema: dev
-  PRODUCTION:
+  prod:
     mode: production
     workspace:
       host: https://adb-7405618670511055.15.azuredatabricks.net
