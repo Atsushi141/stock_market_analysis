@@ -42,7 +42,7 @@ resources:
       queue:
         enabled: true
       parameters:
-        - name: stock_price_date
+        - name: proccessed_date
           default: "{{job.trigger.time.iso_date}}"
         - name: directory_path
           default: "/Volumes/yfinance-dev/raw/stock_price"
