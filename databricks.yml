@@ -17,6 +17,7 @@ variables:
 run_as:
   service_principal_name: '0471c37b-ad1b-4819-a518-0b91782c7816'
 
+
 # artifacts:
 #   default:
 #     type: whl
@@ -29,17 +30,18 @@ targets:
     default: true
     workspace:
       host: https://adb-7405619220999557.17.azuredatabricks.net
+      root_path:  /Workspace/Users/0471c37b-ad1b-4819-a518-0b91782c7816/.bundle/stock_market_anaysis/dev/files/
     variables:
-      catalog: main
-      schema: dev
+      catalog: yfinance-dev
+          
+
   prod:
     mode: production
     workspace:
       host: https://adb-7405618670511055.15.azuredatabricks.net
       root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
     variables:
-      catalog: main
-      schema: prod
+      catalog: yfinance-prod
     permissions:
       - user_name: databricks-admin@temp389.onmicrosoft.com
         level: CAN_MANAGE
