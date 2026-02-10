@@ -11,8 +11,6 @@ include:
 variables:
   catalog:
     description: The catalog to use
-  schema:
-    description: The schema to use
 
 run_as:
   service_principal_name: '0471c37b-ad1b-4819-a518-0b91782c7816'
