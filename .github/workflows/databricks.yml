@@ -1,0 +1,38 @@
+name: Databricks Deploy
+on:
+  workflow_call:
+    inputs:
+      target-env:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    name: Build and Test Application
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.target-env }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Databricks CLI Setup
+        uses: databricks/setup-cli@main
+
+      - name: Configure Databricks Credentials
+        run: |
+          cat <<EOF > ~/.databrickscfg
+          [${{ inputs.target-env }}]
+          host = ${{ vars.DATABRICKS_HOST }}
+          azure_tenant_id = ${{vars.AZURE_TENANT_ID }}
+          azure_client_id = ${{ vars.AZURE_CLIENT_ID }}
+          azure_client_secret = ${{ secrets.AZURE_CLIENT_SECRET }}
+          EOF
+
+      - name: Databricks Bundle Deploy
+        run: databricks bundle deploy -t ${{ inputs.target-env }} -p ${{ inputs.target-env }}
