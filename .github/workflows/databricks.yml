@@ -1,19 +1,19 @@
+name: Databricks Deploy
 on:
-  push:
-    branches-ignore:
-      - main
+  workflow_call:
+    inputs:
+      target-gh-env:
+        required: true
+        type: string
+      target-databricks-workspace:
+        required: true
+        type: string
 
 jobs:
-  build-and-test:
+  deploy:
     name: Build and Test Application
     runs-on: ubuntu-latest
-    environment: DEVELOPMENT
-    # env:
-    #   DATABRICKS_HOST: '${{ vars.DATABRICKS_HOST }}'
-    #   ARM_CLIENT_ID: '${{ vars.AZURE_CLIENT_ID }}'
-    #   ARM_TENANT_ID: '${{ vars.AZURE_TENANT_ID }}'
-    #   ARM_CLIENT_SECRET: '${{ vars.AZURE_CLIENT_SECRET }}'
-
+    environment: ${{ inputs.target-gh-env }}
 
     steps:
       - name: Checkout code
@@ -28,20 +28,17 @@ jobs:
         uses: databricks/setup-cli@main
 
       - name: Configure Databricks Credentials
-        run: | 
+        run: |
           cat <<EOF > ~/.databrickscfg
-          [dev]
+          [${{ inputs.target-databricks-workspace }}]
           host = ${{ vars.DATABRICKS_HOST }}
           azure_tenant_id = ${{vars.AZURE_TENANT_ID }}
           azure_client_id = ${{ vars.AZURE_CLIENT_ID }}
           azure_client_secret = ${{ secrets.AZURE_CLIENT_SECRET }}
           EOF
 
-      # - name: debug
-      #   run: |
-      #     echo ${DATABRICKS_HOST}
-      #     echo ${ARM_CLIENT_ID}
-      #     echo ${ARM_TENANT_ID}
+      - name: debug
+        run: cat ~/.databrickscfg
 
       - name: Databricks Bundle Deploy
-        run: databricks bundle deploy -t dev -p dev
+        run: databricks bundle deploy -t ${{ inputs.target-databricks-workspace }} -p ${{ inputs.target-databricks-workspace }}
